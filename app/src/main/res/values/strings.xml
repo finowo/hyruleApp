@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">hyruleApp</string>
     <string name="enter_hyrule_entity">Enter Hyrule Entity</string>
+    <string name="add_sample_data">Add Sample Data</string>
+    <string name="delete">Delete</string>
+    <string name="delete_all_entities">Delete All Entities</string>
+    <string name="editNote">Edit Note</string>
+    <string name="newNote">New Note</string>
 </resources>

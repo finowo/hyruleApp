@@ -13,6 +13,7 @@ class HyruleListAdapter(
 ) :
     RecyclerView.Adapter<HyruleListAdapter.ViewHolder>() {
 
+    val selectedEntities = arrayListOf<HyruleEntity>()
 
     inner class ViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
@@ -29,16 +30,34 @@ class HyruleListAdapter(
         val entity = hyruleList[position]
         with(holder.binding) {
             entityText.text = entity.text
-            root.setOnClickListener{
-                listener.onEntityClick(entity.id)
+            root.setOnClickListener {
+                listener.editEntity(entity.id)
             }
+            floatingActionButton.setOnClickListener {
+                if (selectedEntities.contains(entity)) {
+                    selectedEntities.remove(entity)
+                    floatingActionButton.setImageResource(R.drawable.ic_notes)
+                } else {
+                    selectedEntities.add(entity)
+                    floatingActionButton.setImageResource(R.drawable.ic_check)
+                }
+                listener.onItemSelectionChanged()
+            }
+            floatingActionButton.setImageResource(
+                if (selectedEntities.contains(entity)) {
+                    R.drawable.ic_check
+                } else {
+                    R.drawable.ic_notes
+                }
+            )
         }
     }
 
     override fun getItemCount() = hyruleList.size
 
     interface HyruleEntityListener {
-        fun onEntityClick(entityId: Int)
+        fun editEntity(entityId: Int)
+        fun onItemSelectionChanged()
     }
 
 }

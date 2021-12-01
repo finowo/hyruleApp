@@ -1,16 +1,43 @@
 package com.hyrule.app
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.hyrule.app.data.AppDatabase
 import com.hyrule.app.data.HyruleEntity
 import com.hyrule.app.data.SampleDataProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MainViewModel : ViewModel() {
+class MainViewModel(app: Application) : AndroidViewModel(app) {
 
-    val hyruleList = MutableLiveData<List<HyruleEntity>>()
+    private val database = AppDatabase.getInstance(app)
 
-    init{
-        hyruleList.value = SampleDataProvider.getHyruleEntities()
+    val hyruleList = database?.entityDao()?.getAll()
+
+    fun addSampleData() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val sampleEntities = SampleDataProvider.getHyruleEntities()
+                database?.entityDao()?.insertALl(sampleEntities)
+            }
+        }
     }
 
+    fun deleteEntities(selectedEntities: List<HyruleEntity>) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+               database?.entityDao()?.deleteEntities(selectedEntities)
+            }
+        }
+    }
+
+    fun deleteAllEntities() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                database?.entityDao()?.deleteAll()
+            }
+        }
+    }
 }
