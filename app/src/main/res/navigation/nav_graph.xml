@@ -5,23 +5,23 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/mainFragment">
 
-    <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.hyrule.app.MainFragment"
-        android:label="main_fragment"
-        tools:layout="@layout/main_fragment" >
-        <action
-            android:id="@+id/action_edit_entity"
-            app:destination="@id/editorFragment" />
-    </fragment>
+
     <fragment
         android:id="@+id/editorFragment"
         android:name="com.hyrule.app.EditorFragment"
         android:label="editor_fragment"
         tools:layout="@layout/editor_fragment" >
         <argument
-            android:name="entityId"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:name="entity"
+            app:argType="com.hyrule.app.data.HyruleEntity" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.hyrule.app.MainFragment"
+        android:label="main_fragment"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_editorFragment"
+            app:destination="@id/editorFragment" />
     </fragment>
 </navigation>

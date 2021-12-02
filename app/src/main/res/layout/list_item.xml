@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="72dp"
@@ -19,7 +20,7 @@
         app:srcCompat="@drawable/ic_notes" />
 
     <TextView
-        android:id="@+id/entityText"
+        android:id="@+id/entityName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -29,5 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/floatingActionButton"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="ruibguirbdgbduirgbdrgbui" />
+        tools:text="Name of the entity will go in here" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

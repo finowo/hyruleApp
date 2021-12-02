@@ -5,3 +5,5 @@ const val TAG = "entity logging"
 const val ENTITY_TEXT_KEY = "oopadoopa"
 const val CURSOR_POSITION_KEY = "doopaoopa"
 const val SELECTED_ENTITIES_KEY = "loop"
+
+const val WEB_SERVICE_URL = "https://botw-compendium.herokuapp.com/api/v2/"

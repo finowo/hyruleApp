@@ -1,20 +1,51 @@
 package com.hyrule.app.data
 
-import android.os.Parcelable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.hyrule.app.NEW_HYRULE_ID
-import kotlinx.android.parcel.Parcelize
-import java.util.*
+import android.os.Parcel
+import android.os.Parcelable
 
-@Parcelize
-@Entity(tableName = "entities")
+// data means the class is going to have some properties, will have at least one primary constructor, and have functions such as equals() toString...
+// See https://www.javatpoint.com/kotlin-data-class for a comparison of Java and Kotlin classes
+
 data class HyruleEntity(
-    @PrimaryKey(autoGenerate = true)
+    // Note in this version of my code I've changed the attributes so they match up with the JSON data.
     var id: Int,
-    var date: Date,
-    var text: String
+    var category: String?,
+    var common_locations: String?,
+    var description: String?,
+    var drops: String?,
+    var image: String?,
+    var name: String?
 ) : Parcelable {
-    constructor() : this(NEW_HYRULE_ID, Date(), "")
-    constructor(date: Date, text: String) : this(NEW_HYRULE_ID, date, text)
+    constructor(parcel: Parcel) : this(
+        parcel.readInt(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(name)
+        parcel.writeString(description)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<HyruleEntity> {
+        override fun createFromParcel(parcel: Parcel): HyruleEntity {
+            return HyruleEntity(parcel)
+        }
+
+        override fun newArray(size: Int): Array<HyruleEntity?> {
+            return arrayOfNulls(size)
+        }
+    }
 }
+

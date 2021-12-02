@@ -6,4 +6,8 @@
     <string name="delete_all_entities">Delete All Entities</string>
     <string name="editNote">Edit Note</string>
     <string name="newNote">New Note</string>
+    <string name="title_hint">Title :</string>
+    <string name="enter_entity_name">Enter Entity Name</string>
+    <string name="description">Description</string>
+    <string name="enter_entity_description">Enter Entity Description</string>
 </resources>

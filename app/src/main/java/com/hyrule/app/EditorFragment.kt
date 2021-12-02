@@ -1,98 +1,73 @@
 package com.hyrule.app
 
-import android.app.Activity
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.hyrule.app.databinding.EditorFragmentBinding
 
 class EditorFragment : Fragment() {
-    private lateinit var viewModel: EditorViewModel
+
     private val args: EditorFragmentArgs by navArgs()
     private lateinit var binding: EditorFragmentBinding
+    private lateinit var viewModel: EditorViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        // ActionBar is menu on top
         (activity as AppCompatActivity).supportActionBar?.let {
+            // 'it' is similar to 'this' in Java (there are small differences)
             it.setHomeButtonEnabled(true)
             it.setDisplayShowHomeEnabled(true)
             it.setDisplayHomeAsUpEnabled(true)
             it.setHomeAsUpIndicator(R.drawable.ic_check)
         }
-
         setHasOptionsMenu(true)
 
-        requireActivity().title =
-            if (args.entityId == NEW_HYRULE_ID) {
-                getString(R.string.newNote)
-            } else {
-                getString(R.string.editNote)
-            }
-
-        viewModel = ViewModelProvider(this).get(EditorViewModel::class.java)
-
+        // bind 'binding' to the editor fragment layout
         binding = EditorFragmentBinding.inflate(inflater, container, false)
-        binding.editor.setText("")
+        // args.entityId is the ID of the argument you added in the nav_graph (you added it to the editor fragment)
+        binding.title.setText(args.entity.name)
+        binding.description.setText(args.entity.description)
 
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
+            object : OnBackPressedCallback(true){
+                override fun handleOnBackPressed(){
+                    // you write the code for saveAndReturn - later this will need to save to the Database
                     saveAndReturn()
                 }
             }
         )
-
-        viewModel.currentEntity.observe(viewLifecycleOwner, Observer {
-            val savedString = savedInstanceState?.getString(ENTITY_TEXT_KEY)
-            val cursorPosition = savedInstanceState?.getInt(CURSOR_POSITION_KEY) ?: 0
-            binding.editor.setText(savedString ?: it.text)
-            binding.editor.setSelection(cursorPosition)
-        })
-        viewModel.getEntityById(args.entityId)
-
         return binding.root
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            // When the home button is clicked, save changes then return to the MainFragment, which is the List
             android.R.id.home -> saveAndReturn()
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun saveAndReturn(): Boolean {
-
-        val imm = requireActivity()
-            .getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
-
-        viewModel.currentEntity.value?.text = binding.editor.text.toString()
-        viewModel.updateEntity()
-
+    private fun saveAndReturn() : Boolean{
         findNavController().navigateUp()
         return true
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        with(binding.editor) {
-            outState.putString(ENTITY_TEXT_KEY, text.toString())
-            outState.putInt(CURSOR_POSITION_KEY, selectionStart)
-        }
-        super.onSaveInstanceState(outState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(EditorViewModel::class.java)
+        // TODO: Use the ViewModel
     }
 
 }

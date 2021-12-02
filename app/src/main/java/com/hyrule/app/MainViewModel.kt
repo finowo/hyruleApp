@@ -1,43 +1,33 @@
 package com.hyrule.app
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
-import com.hyrule.app.data.AppDatabase
+import android.util.Log
+import androidx.lifecycle.*
 import com.hyrule.app.data.HyruleEntity
-import com.hyrule.app.data.SampleDataProvider
-import kotlinx.coroutines.Dispatchers
+import com.hyrule.app.dataaccess.RetrofitInstance
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class MainViewModel(app: Application) : AndroidViewModel(app) {
+class MainViewModel : ViewModel() {
+    private val _entities: MutableLiveData<List<HyruleEntity>> = MutableLiveData()
 
-    private val database = AppDatabase.getInstance(app)
+    val entities: LiveData<List<HyruleEntity>>
+        get() = _entities
 
-    val hyruleList = database?.entityDao()?.getAll()
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
 
-    fun addSampleData() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val sampleEntities = SampleDataProvider.getHyruleEntities()
-                database?.entityDao()?.insertALl(sampleEntities)
-            }
-        }
+
+    init {
+        getEntities()
     }
 
-    fun deleteEntities(selectedEntities: List<HyruleEntity>) {
+    private fun getEntities() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-               database?.entityDao()?.deleteEntities(selectedEntities)
-            }
-        }
-    }
-
-    fun deleteAllEntities() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                database?.entityDao()?.deleteAll()
-            }
+            _isLoading.value = true
+            val fetchedEntities = RetrofitInstance.api.getHyruleEntities()
+            Log.i(TAG, "List of Plants : $fetchedEntities")
+            _entities.value = fetchedEntities
+            _isLoading.value = false
         }
     }
 }

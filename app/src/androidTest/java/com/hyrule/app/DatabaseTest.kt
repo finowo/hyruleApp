@@ -3,7 +3,6 @@ package com.hyrule.app
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.hyrule.app.data.AppDatabase
 import com.hyrule.app.data.EntityDao
 import com.hyrule.app.data.HyruleEntity
 import com.hyrule.app.data.SampleDataProvider
