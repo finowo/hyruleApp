@@ -8,7 +8,6 @@ import android.os.Parcelable
 // See https://www.javatpoint.com/kotlin-data-class for a comparison of Java and Kotlin classes
 
 data class HyruleEntity(
-    // Note in this version of my code I've changed the attributes so they match up with the JSON data.
     var id: Int,
     var category: String?,
     var common_locations: String?,

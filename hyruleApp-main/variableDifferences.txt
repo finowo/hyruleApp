@@ -1,0 +1,17 @@
+him // me
+NoteEntity // HyruleEntity
+NEW_NOTE_ID // NEW_HYRULE_ID
+sampleText1 // sampleHyruleEntity1
+getNotes // getHyruleEntities
+notesList // hyruleList
+noteLogging // hyruleEntityLogging
+NotesListAdapter // hyruleListAdapter
+list_item // hyrule_entity
+ListItemBinding // HyruleEntityBinding
+note // entity
+noteText // entityText
+action_edit_note // action_edit_entity
+ListItemListener // HyruleEntityListener
+onItemClick // onEntityClick
+noteId // entityId
+createNotes // createEntities
